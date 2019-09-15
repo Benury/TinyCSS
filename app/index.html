@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TinyCSS|快速创建网页元素</title>
+    <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./common.css">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./codemirror-5.48.4/lib/codemirror.css">
+    <link rel="stylesheet" href="./codemirror-5.48.4/theme/cobalt.css">
+    <link rel="stylesheet" href="./codemirror-5.48.4/theme/rubyblue.css">
+    <link rel="stylesheet" href="./codemirror-5.48.4/theme/monokai.css">
+    <link rel="stylesheet" href="./codemirror-5.48.4/theme/material.css">
+
+    <link rel="stylesheet" href="./dist-editor-dark.css">
+    
+</head>
+<body>
+<div id="oo">
+    <header class="head">
+        <img class="icon" src="./img/cloud.png"  alt="">
+        <span class="title">TinyCSS</span>
+        <ul class="r menu" v-if="mode==0">
+            <li class="l">
+                <a href="">
+                  <i class="iconfont">&#xe615;</i>  设置
+                </a>
+            </li>
+            <li class="l">
+                <a href="">
+                    <i  class="iconfont">&#xe63e;</i>  登录</a>
+            </li>
+        </ul>
+        <ul class="r menu menu-save" v-else-if="mode==1">
+                
+                    <span href="" @click="dialogFormVisible=true">
+                        保存
+                    </span>
+              
+                
+            </ul>
+    </header>
+    <main class="content">
+        <menu class="left">
+            <li class="item active">
+                <i class="iconfont">&#xe654;</i>
+                <p>菜单</p>
+            </li>
+            <li class="item">
+                <i class="iconfont">&#xe8c6;</i>
+                <p>布局</p>
+            </li>
+            <li class="item">
+                <i class="iconfont">&#xe6c7;</i>
+                <p>列表</p>
+            </li>
+            <li class="item">
+                <i class="iconfont">&#xe611;</i>
+                <p>我的</p>
+            </li>
+            
+        </menu>
+        <menu class="model">
+            <div class="add" @click="add">+</div>
+            <li class="card">
+                <img class="img" src="./img/card/1.png" alt="">
+            </li>
+            <li class="card">
+                <img class="img" src="./img/card/2.png" alt="">
+            </li>
+            <li class="card">
+                <img class="img" src="./img/card/3.png" alt="">
+            </li>
+            <li class="card">
+                <img class="img" src="./img/card/1.png" alt="">
+            </li>
+        </menu>
+        <section class="edit">
+            <div class="l item">
+                <form>
+                    <textarea name="code" ref="codeHtml"></textarea>
+                    <div class="windowLabelCont">
+                            <a href="#" class="windowLabel" data-panel="html" data-popover-trigger="html">
+                              <span class="label">HTML</span>
+                              <svg width="8" height="7" viewBox="-0.019531 -52.792969 30.039062 25.195312">
+                                <path d="M29.941406 -52.500000C29.785156 -52.656250 29.589844 -52.753906 29.355469 -52.792969L0.644531 -52.792969C0.410156 -52.753906 0.214844 -52.656250 0.058594 -52.500000C-0.019531 -52.265625 0.000000 -52.050781 0.117188 -51.855469L14.472656 -27.890625C14.628906 -27.734375 14.804688 -27.636719 15.000000 -27.597656C15.234375 -27.636719 15.410156 -27.734375 15.527344 -27.890625L29.882812 -51.855469C30.000000 -52.089844 30.019531 -52.304688 29.941406 -52.500000ZM29.941406 -52.500000"></path>
+                              </svg>
+                            </a>
+                          </div>
+                </form>
+            </div>
+            <div class="l item">
+                <form>
+                    <textarea name="code" ref="codeCss"></textarea>
+                    <div class="windowLabelCont">
+                            <a href="#" class="windowLabel" data-panel="css" data-popover-trigger="css">
+                              <span class="label">CSS</span>
+                              <svg width="8" height="7" viewBox="-0.019531 -52.792969 30.039062 25.195312">
+                                <path d="M29.941406 -52.500000C29.785156 -52.656250 29.589844 -52.753906 29.355469 -52.792969L0.644531 -52.792969C0.410156 -52.753906 0.214844 -52.656250 0.058594 -52.500000C-0.019531 -52.265625 0.000000 -52.050781 0.117188 -51.855469L14.472656 -27.890625C14.628906 -27.734375 14.804688 -27.636719 15.000000 -27.597656C15.234375 -27.636719 15.410156 -27.734375 15.527344 -27.890625L29.882812 -51.855469C30.000000 -52.089844 30.019531 -52.304688 29.941406 -52.500000ZM29.941406 -52.500000"></path>
+                              </svg>
+                            </a>
+                          </div>
+                </form>
+            </div>
+            <div class="l item">
+
+            </div>
+            <div class="l item" v-html="html">
+
+            </div>
+            
+        </section>
+    </main>
+    <el-dialog  title="页面元素" :visible.sync="dialogFormVisible">
+            <el-form :model="form" label-width="80px">
+              <el-form-item label="名称" >
+                <el-input  v-model="form.title" ></el-input>
+              </el-form-item>
+              <el-form-item label="描述" >
+                    <el-input
+                    type="textarea"
+                    :rows="6"
+                
+                    v-model="form.desc">
+                  </el-input>
+             </el-form-item>
+             <el-form-item label="预览图" >
+             </el-form-item>
+             <div style="margin-left:80px;">
+                    <el-upload
+                    action="#"
+                    size="small"
+                    list-type="picture-card"
+                    ::limit="1"
+                    :on-change="changeUpload"
+                    :before-upload="beforeUpload"
+                    ref="uploadImg"
+                    :auto-upload="false">
+                      <i slot="default" class="el-icon-plus"></i>
+                      <div slot="file" slot-scope="{file}">
+                        <img
+                          class="el-upload-list__item-thumbnail"
+                          :src="file.url" alt=""
+                        >
+                        <span class="el-upload-list__item-actions">
+                          <span
+                            class="el-upload-list__item-preview"
+                            @click="handlePictureCardPreview(file)"
+                          >
+                            <i class="el-icon-zoom-in"></i>
+                          </span>
+                          <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleDownload(file)"
+                          >
+                            <i class="el-icon-download"></i>
+                          </span>
+                          <span
+                            v-if="!disabled"
+                            class="el-upload-list__item-delete"
+                            @click="handleRemove(file)"
+                          >
+                            <i class="el-icon-delete"></i>
+                          </span>
+                        </span>
+                      </div>
+                  </el-upload>
+             </div>
+
+             
+             
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button size="small" @click="dialogFormVisible = false">取 消</el-button>
+              <el-button size="small" type="primary" @click="submit">确 定</el-button>
+            </div>
+          </el-dialog>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="./codemirror-5.48.4/lib/codemirror.js"></script>
+<script src="./codemirror-5.48.4/mode/css/css.js"></script>
+    <script src="./codemirror-5.48.4/mode/xml/xml.js"></script>
+<script>
+    var CodeMirror = window.CodeMirror 
+    CodeMirror.defineExtension("autoFormatRange", function (from, to) {
+        var cm = this;
+        var outer = cm.getMode(), text = cm.getRange(from, to).split("\n");
+        var state = CodeMirror.copyState(outer, cm.getTokenAt(from).state);
+        var tabSize = cm.getOption("tabSize");
+
+        var out = "", lines = 0, atSol = from.ch == 0;
+        function newline() {
+            out += "\n";
+            atSol = true;
+            ++lines;
+        }
+
+        for (var i = 0; i < text.length; ++i) {
+            var stream = new CodeMirror.StringStream(text[i], tabSize);
+            while (!stream.eol()) {
+                var inner = CodeMirror.innerMode(outer, state);
+                var style = outer.token(stream, state), cur = stream.current();
+                stream.start = stream.pos;
+                if (!atSol || /\S/.test(cur)) {
+                    out += cur;
+                    atSol = false;
+                }
+                if (!atSol && inner.mode.newlineAfterToken &&
+                    inner.mode.newlineAfterToken(style, cur, stream.string.slice(stream.pos) || text[i+1] || "", inner.state))
+                    newline();
+            }
+            if (!stream.pos && outer.blankLine) outer.blankLine(state);
+            if (!atSol) newline();
+        }
+
+        cm.operation(function () {
+            cm.replaceRange(out, from, to);
+            for (var cur = from.line + 1, end = from.line + lines; cur <= end; ++cur)
+                cm.indentLine(cur, "smart");
+        });
+    });
+
+    // Applies automatic mode-aware indentation to the specified range
+    CodeMirror.defineExtension("autoIndentRange", function (from, to) {
+        var cmInstance = this;
+        this.operation(function () {
+            for (var i = from.line; i <= to.line; i++) {
+                cmInstance.indentLine(i, "smart");
+            }
+        });
+    });
+    new Vue({
+        el:'#oo',
+        data:function(){
+            return {
+                mode:0,
+                dialogFormVisible:false,
+                disabled:false,
+                form:{},
+                formData: new FormData(),
+                optionHtml:{
+                    tabSize:2,
+                    lineWrapping: true, 
+                    mode:'text/html',
+                    lineNumbers:true
+                },
+                optionCss:{
+                    tabSize:2,
+                    lineWrapping: true, 
+                    mode:'text/css',
+                    lineNumbers:true
+                },
+                codeMirrorHtml:'',
+                codeMirrorCss:'',
+                html:`<div id="hello-bar">
+
+
+  <div class="hbBody">
+    <section>
+      <h3>Start with a boilerplate:</h3>
+      <ul class="boilerplates">
+        <!-- <li><a href="/">Empty</a></li> -->
+        <li><a href="/boilerplate/jquery">jQuery</a></li>
+        <li><a href="/boilerplate/vue">Vue</a></li>
+        <li><a href="/boilerplate/react-jsx">React</a></li>
+        <li><a href="/boilerplate/react-jsx">React + JSX</a></li>
+        <li><a href="/boilerplate/preact">Preact</a></li>
+        <li><a href="/boilerplate/typescript">TypeScript</a></li>
+        <li><a href="/boilerplate/coffeescript">CoffeeScript</a></li>
+        <li><a href="/boilerplate/scss">SCSS</a></li>
+        <li><a href="/boilerplate/responsive-css-grid">CSS Grid (responsive)</a></li>
+        <li><a href="/boilerplate/bootstrap">Bootstrap</a></li>
+        <li><a href="/boilerplate/postcss">PostCSS <span>New</span></a></li>
+      </ul>
+      <div class="bpAction">
+        <svg version="1.1" viewBox="0 0 24 24">
+          <g stroke-linecap="round" stroke-width="1.4" stroke="#fff" fill="none" stroke-linejoin="round">
+            <path d="M17.94,17.94l-4.93766e-08,3.76374e-08c-1.70941,1.303 -3.79089,2.02486 -5.94,2.06c-7,0 -11,-8 -11,-8l-3.63017e-07,6.76516e-07c1.24389,-2.3181 2.96914,-4.34339 5.06,-5.94m3.84,-1.82l-5.75178e-07,1.34634e-07c0.688332,-0.161121 1.39306,-0.241661 2.1,-0.24c7,0 11,8 11,8l4.63472e-07,-8.67058e-07c-0.60702,1.13561 -1.33094,2.20473 -2.16,3.19m-6.72,-1.07l1.53825e-07,-1.65082e-07c-1.12951,1.21217 -3.02783,1.27918 -4.24,0.149667c-1.21217,-1.12951 -1.27918,-3.02783 -0.149667,-4.24c0.0481128,-0.0516337 0.0980326,-0.101554 0.149666,-0.149666"></path>
+            <path d="M1,1l22,22"></path>
+          </g>
+        </svg>
+        <a href="#">Show boilerplate bar less often?</a>
+      </div>
+    </section>
+
+    <section>
+      <h3>Links:</h3>
+      <ul>
+        <li>👍🏻 <a href="https://trello.com/b/LakLkQBW/jsfiddle-roadmap" target="_blank" rel="noopener">Roadmap</a> (vote for features)</li>
+        <li>🐞 <a href="https://github.com/jsfiddle/jsfiddle-issues/issues" target="_blank" rel="noopener">Bug tracker</a></li>
+        <li>☁️ <a href="https://jsfiddle.net/about" target="_blank" rel="noopener">About</a></li>
+        <li>📙 <a href="https://docs.jsfiddle.net" target="_blank" rel="noopener">Docs</a></li>
+        <li>🎛 <a href="http://status.jsfiddle.net" target="_blank" rel="noopener">Service status</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>JSFiddle is for:</h3>
+      <ul class="articles">
+        <!-- <li><a href="https://julian.is/article/css-grid-at-scale/?utm_source=jsfiddle&amp;utm_medium=editor" target="_blank">Adopting CSS Grid at scale</a> <span>via julian.is</span></li>
+        <li><a href="https://changelog.com/news/show-mdn-browser-compatibility-data-on-the-command-line-NRR2/?utm_source=jsfiddle&amp;utm_medium=editor" target="_blank">Show MDN browser compatibility data on the command line</a> <span>via changelog.com</span></li>
+        <li>🙋 <a href="https://trello.com/b/VVZC5uQY/jsfiddle-links-inbox" target="_blank">Suggest a link</a></li> -->
+        <li><a href="https://docs.jsfiddle.net/use-cases/demos-for-products-or-libraries" target="_blank" rel="noopener">Demos for docs</a></li>
+        <li><a href="https://docs.jsfiddle.net/use-cases/bug-reporting-test-case-for-github-issues" target="_blank" rel="noopener">Bug reporting (test-case) for Github Issues</a></li>
+        <li><a href="https://docs.jsfiddle.net/use-cases/answers-on-stack-overflow" target="_blank" rel="noopener">Presenting code answers on Stack Overflow</a></li>
+        <li><a href="https://docs.jsfiddle.net/use-cases/live-code-collaboration" target="_blank" rel="noopener">Live code collaboration</a></li>
+        <li><a href="https://docs.jsfiddle.net/use-cases/code-snippets-hosting" target="_blank" rel="noopener">Code snippets hosting</a></li>
+        <li>... or just your humble code playground ✌🏻</li>
+      </ul>
+    </section>
+  </div>
+</div>`,
+                css:`ul,ol{
+    padding-left:0;
+    list-style-type:none;
+}
+li{
+    list-style: none;
+}
+/*image with no-border*/
+a{color:#333;text-decoration: none;}
+a img{border:0;}
+img{border:0;}`
+            }
+        },
+        mounted:function() {
+            this._initialize()
+        },
+        computed: {
+           
+        },
+        methods: {
+            _initialize:function(){
+                this.codeMirrorHtml = CodeMirror.fromTextArea(this.$refs.codeHtml,this.optionHtml)
+                this.codeMirrorCss  = CodeMirror.fromTextArea(this.$refs.codeCss, this.optionCss)
+                this.codeMirrorHtml.setValue(this.html);
+                this.codeMirrorCss.setValue(this.css)
+                var totalHtml = this.codeMirrorHtml.lineCount()
+                //this.codeMirrorHtml.autoFormatRange({line:0, ch:0}, {line:totalHtml});
+                var totalCss = this.codeMirrorCss.lineCount();  
+                //this.codeMirrorCss.autoFormatRange({line:0, ch:0}, {line:totalCss});
+            },
+            add:function(){
+                var self = this
+                self.mode = 1
+                self.codeMirrorHtml.setValue('')
+                self.codeMirrorCss.setValue('')
+
+            },
+            changeUpload:function(){},
+            beforeUpload:function(file){
+                this.formData.append('file',file)
+                
+                return false;
+            },
+            submit:function(){
+                var self = this
+                self.formData = new FormData()
+                self.formData.append('title',self.form.title)
+                self.formData.append('type',0)
+                
+                self.formData.append('desc',self.form.desc)
+                self.formData.append('html',self.codeMirrorHtml.getValue())
+                self.formData.append('css',self.codeMirrorCss.getValue())
+                self.dialogFormVisible = false
+                self.$refs.uploadImg.submit()
+                
+                $.ajax({
+                    type:'post',                  
+                    url:'/Api/IPAddress',
+                    data: self.formData   ,                    //请求的参数
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success:function(result){
+                        var json = JSON.parse(result);
+                        
+                    }
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>
