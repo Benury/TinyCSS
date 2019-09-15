@@ -39,9 +39,10 @@ li {
 }
 #oo .head .title {
   margin-left: 10px;
-  color: #e2e2e2;
-  font-weight: 500;
+  color: #fff;
+  font-weight: 600;
   font-size: 16px;
+  font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
 }
 #oo .head .icon {
   height: 32px;
