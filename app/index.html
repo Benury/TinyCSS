@@ -18,11 +18,12 @@
     
 </head>
 <body onselect="return false">
-<div id="oo">
+<div id="oo" v-cloak>
     <header class="head">
         <img class="icon" src="./img/cloud.png"  alt="">
         <span class="title">TinyCSS</span>
         <ul class="r menu" v-if="mode==0">
+            
             <li class="l">
                 <a href="">
                   <i class="iconfont">&#xe615;</i>  设置
@@ -44,22 +45,13 @@
     </header>
     <main class="content">
         <menu class="left">
-            <li class="item active">
-                <i class="iconfont">&#xe654;</i>
-                <p>菜单</p>
+            <li class="item" :class="{'active':currentMenuType == item.type}"
+            @click="changeMenu(item)"
+            v-for="(item,index) in menus" :key="index">
+                <i class="iconfont" :class="item.icon"></i>
+                <p>{{item.title}}</p>
             </li>
-            <li class="item">
-                <i class="iconfont">&#xe8c6;</i>
-                <p>布局</p>
-            </li>
-            <li class="item">
-                <i class="iconfont">&#xe6c7;</i>
-                <p>列表</p>
-            </li>
-            <li class="item">
-                <i class="iconfont">&#xe611;</i>
-                <p>我的</p>
-            </li>
+           
             
         </menu>
         <menu class="model">
@@ -78,6 +70,7 @@
             </li>
         </menu>
         <section class="edit">
+           
             <div class="l item">
                 <form>
                     <textarea name="code" ref="codeHtml"></textarea>
@@ -105,7 +98,7 @@
                 </form>
             </div>
             <div class="l item">
-
+              
             </div>
             <div class="l item" v-html="html">
 
@@ -328,7 +321,16 @@ li{
 /*image with no-border*/
 a{color:#333;text-decoration: none;}
 a img{border:0;}
-img{border:0;}`
+img{border:0;}`,
+
+              menus:[
+                {type:0,title:'布局',icon:'icon-grid'},
+                {type:1,title:'菜单',icon:'icon-menu'},
+                {type:2,title:'列表',icon:'icon-list'},
+                {type:3,title:'我的',icon:'icon-me'}
+
+              ],
+              currentMenuType:0
             }
         },
         mounted:function() {
@@ -355,9 +357,14 @@ img{border:0;}`
                 self.codeMirrorCss.setValue('')
 
             },
+            changeMenu:function(item){
+                var self = this
+                self.currentMenuType = item.type
+
+            },
             changeUpload:function(){},
             beforeUpload:function(file){
-                this.formData.append('file',file)
+                this.formData.append('fileImg',file)
                 
                 return false;
             },
@@ -365,8 +372,8 @@ img{border:0;}`
                 var self = this
                 self.formData = new FormData()
                 self.formData.append('title',self.form.title)
-                self.formData.append('type',0)
-                
+                self.formData.append('userid','admin')
+                self.formData.append('type',self.currentMenuType)
                 self.formData.append('desc',self.form.desc)
                 self.formData.append('html',self.codeMirrorHtml.getValue())
                 self.formData.append('css',self.codeMirrorCss.getValue())
@@ -375,7 +382,7 @@ img{border:0;}`
                 
                 $.ajax({
                     type:'post',                  
-                    url:'/Api/IPAddress',
+                    url:'http://localhost:1576/api/values',
                     data: self.formData   ,                    //请求的参数
                     async: false,
                     cache: false,
