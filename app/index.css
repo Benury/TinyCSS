@@ -119,7 +119,7 @@ li {
   right: 0;
   top: 24px;
   border: 8px solid transparent;
-  border-right-color: #fff;
+  border-right-color: #fafafa;
 }
 #oo .content .left .item p {
   margin-top: 5px;
@@ -144,6 +144,9 @@ li {
   max-width: 100%;
 }
 #oo .content .model .card:hover {
+  box-shadow: 1px 1px 8px 0 rgba(0, 0, 0, 0.16);
+}
+#oo .content .model .card.active {
   box-shadow: 1px 1px 8px 0 rgba(0, 0, 0, 0.16);
 }
 #oo .content .model .add {

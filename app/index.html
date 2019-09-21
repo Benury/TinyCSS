@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="./codemirror-5.48.4/theme/rubyblue.css">
     <link rel="stylesheet" href="./codemirror-5.48.4/theme/monokai.css">
     <link rel="stylesheet" href="./codemirror-5.48.4/theme/material.css">
-
     <link rel="stylesheet" href="./dist-editor-dark.css">
     
 </head>
@@ -56,10 +55,11 @@
         </menu>
         <menu class="model">
             <div class="add" @click="add">+</div>
-            <li class="card">
-                <img class="img" src="./img/card/1.png" alt="">
+            
+            <li class="card" :class="{'active':currentComp == index}" v-for="(item,index) in datas" @click="currentComp = index" >
+                <img class="img" :src="'http://pxz8iaq4h.bkt.clouddn.com/'+item.mimg" alt="">
             </li>
-            <li class="card">
+            <!-- <li class="card">
                 <img class="img" src="./img/card/2.png" alt="">
             </li>
             <li class="card">
@@ -67,7 +67,7 @@
             </li>
             <li class="card">
                 <img class="img" src="./img/card/1.png" alt="">
-            </li>
+            </li> -->
         </menu>
         <section class="edit">
            
@@ -100,7 +100,7 @@
             <div class="l item">
               
             </div>
-            <div class="l item" v-html="html">
+            <div class="l item" v-html="preHtml">
 
             </div>
             
@@ -253,75 +253,8 @@
                 },
                 codeMirrorHtml:'',
                 codeMirrorCss:'',
-                html:`<div id="hello-bar">
-
-
-  <div class="hbBody">
-    <section>
-      <h3>Start with a boilerplate:</h3>
-      <ul class="boilerplates">
-        <!-- <li><a href="/">Empty</a></li> -->
-        <li><a href="/boilerplate/jquery">jQuery</a></li>
-        <li><a href="/boilerplate/vue">Vue</a></li>
-        <li><a href="/boilerplate/react-jsx">React</a></li>
-        <li><a href="/boilerplate/react-jsx">React + JSX</a></li>
-        <li><a href="/boilerplate/preact">Preact</a></li>
-        <li><a href="/boilerplate/typescript">TypeScript</a></li>
-        <li><a href="/boilerplate/coffeescript">CoffeeScript</a></li>
-        <li><a href="/boilerplate/scss">SCSS</a></li>
-        <li><a href="/boilerplate/responsive-css-grid">CSS Grid (responsive)</a></li>
-        <li><a href="/boilerplate/bootstrap">Bootstrap</a></li>
-        <li><a href="/boilerplate/postcss">PostCSS <span>New</span></a></li>
-      </ul>
-      <div class="bpAction">
-        <svg version="1.1" viewBox="0 0 24 24">
-          <g stroke-linecap="round" stroke-width="1.4" stroke="#fff" fill="none" stroke-linejoin="round">
-            <path d="M17.94,17.94l-4.93766e-08,3.76374e-08c-1.70941,1.303 -3.79089,2.02486 -5.94,2.06c-7,0 -11,-8 -11,-8l-3.63017e-07,6.76516e-07c1.24389,-2.3181 2.96914,-4.34339 5.06,-5.94m3.84,-1.82l-5.75178e-07,1.34634e-07c0.688332,-0.161121 1.39306,-0.241661 2.1,-0.24c7,0 11,8 11,8l4.63472e-07,-8.67058e-07c-0.60702,1.13561 -1.33094,2.20473 -2.16,3.19m-6.72,-1.07l1.53825e-07,-1.65082e-07c-1.12951,1.21217 -3.02783,1.27918 -4.24,0.149667c-1.21217,-1.12951 -1.27918,-3.02783 -0.149667,-4.24c0.0481128,-0.0516337 0.0980326,-0.101554 0.149666,-0.149666"></path>
-            <path d="M1,1l22,22"></path>
-          </g>
-        </svg>
-        <a href="#">Show boilerplate bar less often?</a>
-      </div>
-    </section>
-
-    <section>
-      <h3>Links:</h3>
-      <ul>
-        <li>👍🏻 <a href="https://trello.com/b/LakLkQBW/jsfiddle-roadmap" target="_blank" rel="noopener">Roadmap</a> (vote for features)</li>
-        <li>🐞 <a href="https://github.com/jsfiddle/jsfiddle-issues/issues" target="_blank" rel="noopener">Bug tracker</a></li>
-        <li>☁️ <a href="https://jsfiddle.net/about" target="_blank" rel="noopener">About</a></li>
-        <li>📙 <a href="https://docs.jsfiddle.net" target="_blank" rel="noopener">Docs</a></li>
-        <li>🎛 <a href="http://status.jsfiddle.net" target="_blank" rel="noopener">Service status</a></li>
-      </ul>
-    </section>
-
-    <section>
-      <h3>JSFiddle is for:</h3>
-      <ul class="articles">
-        <!-- <li><a href="https://julian.is/article/css-grid-at-scale/?utm_source=jsfiddle&amp;utm_medium=editor" target="_blank">Adopting CSS Grid at scale</a> <span>via julian.is</span></li>
-        <li><a href="https://changelog.com/news/show-mdn-browser-compatibility-data-on-the-command-line-NRR2/?utm_source=jsfiddle&amp;utm_medium=editor" target="_blank">Show MDN browser compatibility data on the command line</a> <span>via changelog.com</span></li>
-        <li>🙋 <a href="https://trello.com/b/VVZC5uQY/jsfiddle-links-inbox" target="_blank">Suggest a link</a></li> -->
-        <li><a href="https://docs.jsfiddle.net/use-cases/demos-for-products-or-libraries" target="_blank" rel="noopener">Demos for docs</a></li>
-        <li><a href="https://docs.jsfiddle.net/use-cases/bug-reporting-test-case-for-github-issues" target="_blank" rel="noopener">Bug reporting (test-case) for Github Issues</a></li>
-        <li><a href="https://docs.jsfiddle.net/use-cases/answers-on-stack-overflow" target="_blank" rel="noopener">Presenting code answers on Stack Overflow</a></li>
-        <li><a href="https://docs.jsfiddle.net/use-cases/live-code-collaboration" target="_blank" rel="noopener">Live code collaboration</a></li>
-        <li><a href="https://docs.jsfiddle.net/use-cases/code-snippets-hosting" target="_blank" rel="noopener">Code snippets hosting</a></li>
-        <li>... or just your humble code playground ✌🏻</li>
-      </ul>
-    </section>
-  </div>
-</div>`,
-                css:`ul,ol{
-    padding-left:0;
-    list-style-type:none;
-}
-li{
-    list-style: none;
-}
-/*image with no-border*/
-a{color:#333;text-decoration: none;}
-a img{border:0;}
-img{border:0;}`,
+                preHtml:'',
+                
 
               menus:[
                 {type:0,title:'布局',icon:'icon-grid'},
@@ -330,25 +263,67 @@ img{border:0;}`,
                 {type:3,title:'我的',icon:'icon-me'}
 
               ],
+              datas:[],
+              currentComp:0,
               currentMenuType:0
             }
         },
         mounted:function() {
-            this._initialize()
+            this._getData(this.currentMenuType)
+            
         },
         computed: {
-           
+           comp:function(){
+             return this.datas[this.currentComp]
+           }
         },
         methods: {
+            _getData:function(type){
+              var self = this
+              $.ajax({
+                    type:'post',                  
+                    url:'http://localhost:1576/api/values/'+type,                                  
+                    success:function(res){
+                        //var json = JSON.parse(result);
+                        if(res.code == 200){
+                            self.datas = res.data
+                            self._initialize()
+                        }
+                        
+                    }
+                });
+            },
             _initialize:function(){
+                var self = this;
                 this.codeMirrorHtml = CodeMirror.fromTextArea(this.$refs.codeHtml,this.optionHtml)
                 this.codeMirrorCss  = CodeMirror.fromTextArea(this.$refs.codeCss, this.optionCss)
-                this.codeMirrorHtml.setValue(this.html);
-                this.codeMirrorCss.setValue(this.css)
+                
+                this.codeMirrorHtml.setValue(self.comp.mhtml);
+                this.codeMirrorCss.setValue(self.comp.mcss)
                 var totalHtml = this.codeMirrorHtml.lineCount()
                 //this.codeMirrorHtml.autoFormatRange({line:0, ch:0}, {line:totalHtml});
                 var totalCss = this.codeMirrorCss.lineCount();  
                 //this.codeMirrorCss.autoFormatRange({line:0, ch:0}, {line:totalCss});
+                // 双向绑定
+                this.preHtml = this.codeMirrorHtml.getValue();
+
+                var style = document.createElement('style');
+                style.type = "text/css";
+                style.innerText = this.codeMirrorCss.getValue();
+                document.getElementsByTagName('head')[0].appendChild(style)
+              
+                this.codeMirrorHtml.on('change', (coder) => {
+                  self.preHtml = this.codeMirrorHtml.getValue();             
+                })
+                this.codeMirrorCss.on('change', (coder) => {
+                  //self.preHtml = this.codeMirrorHtml.getValue(); 
+                  document.getElementsByTagName('style')[0].remove();
+                  var style = document.createElement('style');
+                  style.type = "text/css";
+                  style.innerText = this.codeMirrorCss.getValue();
+                  document.getElementsByTagName('head')[0].appendChild(style)
+
+                })
             },
             add:function(){
                 var self = this
@@ -360,7 +335,8 @@ img{border:0;}`,
             changeMenu:function(item){
                 var self = this
                 self.currentMenuType = item.type
-
+                self._getData(self.currentMenuType)
+                self.currentComp = 0
             },
             changeUpload:function(){},
             beforeUpload:function(file){
