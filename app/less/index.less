@@ -75,11 +75,20 @@ li{
                 }
             }
             span{
-                padding: 5px 10px;
+                display: inline-block;
+                width: 100px;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
                 background: #0084ff;
                 color:#fff;
                 border-radius: 2px;
                 cursor: pointer;
+            }
+            .close{
+                background: #fafafa;
+                color: #1c2128;
+                margin-left:20px;
             }
         }   
         .menu a{          
@@ -174,6 +183,9 @@ li{
             bottom: 0;
             
             background: #20262e;
+            &.add-tpl{
+                left: 0;
+            }
             .item{
                 float: left;
                 width: 50%;
