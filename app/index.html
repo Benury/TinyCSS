@@ -262,7 +262,7 @@
           var self = this
           $.ajax({
             type: 'post',
-            url: 'http://localhost:1576/api/values/' + type,
+            url: '/api/values/' + type,
             success: function (res) {
               if (res.code == 200) {
                 self.datas = res.data
@@ -349,7 +349,7 @@
 
           $.ajax({
             type: 'post',
-            url: 'http://localhost:1576/api/values',
+            url: '/api/values',
             data: self.formData, //请求的参数
             async: false,
             cache: false,
