@@ -24,6 +24,11 @@
         <span class="title">TinyCSS</span>
         <ul class="r menu" v-if="mode==0">
             
+                <li class="l">
+                        <a href="">
+                          <i class="iconfont">&#xe601;</i>  我的
+                        </a>
+                    </li>
             <li class="l">
                 <a href="">
                   <i class="iconfont">&#xe615;</i>  设置
@@ -100,7 +105,10 @@
             <div class="l item">
               
             </div>
-            <div class="l item" v-html="html">
+            <div class="l item" v-if="currentMenuType==0">
+                <img src="./img/cloud.png" alt="">
+            </div>
+            <div class="l item" v-else v-html="html">
 
             </div>
             
@@ -324,10 +332,12 @@ a img{border:0;}
 img{border:0;}`,
 
               menus:[
-                {type:0,title:'布局',icon:'icon-grid'},
-                {type:1,title:'菜单',icon:'icon-menu'},
-                {type:2,title:'列表',icon:'icon-list'},
-                {type:3,title:'我的',icon:'icon-me'}
+                {type:0,title:'布局',icon:'icon-grid'}, /* 太大了，要显示图片 */                 
+                {type:1,title:'技巧',icon:'icon-grid'},
+                {type:2,title:'菜单',icon:'icon-menu'},
+                {type:3,title:'列表',icon:'icon-list'},
+                // 创建的和收藏的都放进去，先创建再收藏，应该再分下项目，或者我的最好后面跳转一个新页面
+                // 我的放在菜单上，我创建的，我收藏的，我的项目。
 
               ],
               currentMenuType:0

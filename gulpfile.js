@@ -15,7 +15,7 @@ gulp.task('serve', function() {
         port: 3033
     });
     // 监听某一个文件夹下的所有scss文件，执行sass任务
-    gulp.watch('./app/*.html').on('change', reload);;
+    gulp.watch('./app/**/*.html').on('change', reload);;
     gulp.watch('./app/less/*.less', ['less']);
 });
 
