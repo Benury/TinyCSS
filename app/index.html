@@ -52,11 +52,17 @@
         </li>
       </menu>
       <menu class="model" v-show="mode==0">
-        <div class="add" @click="add">+</div>
+        <el-button size="small" class="add" @click="add" icon="el-icon-plus"></el-button>
 
         <li class="card" :class="{'active':currentComp == index}" v-for="(item,index) in datas"
-          @click="changeCard(index)">
+          @click="changeCard(index,item)">
           <img class="img" :src="'http://pxz8iaq4h.bkt.clouddn.com/'+item.mimg" alt="">
+        <div class="card-mask" >
+            <div class="mask-btns" onselect="return false;" @click="fav(item,index)">
+              <i class="iconfont preview" v-if="item.fav!=-1">&#xe60a;</i>
+              <i class="iconfont like" v-else>&#xe659;</i>
+            </div>
+        </div>
         </li>
       </menu>
       <section class="edit" :class="{'add-tpl':mode==1}">
@@ -91,6 +97,7 @@
           </form>
         </div>
         <div class="l item">
+          
         </div>
         <!-- <div class="l item" v-if="currentMenuType==0 && mode ==0">
           <img src="./img/cloud.png" alt="">
@@ -146,6 +153,7 @@
   <script src="./codemirror-5.48.4/lib/codemirror.js"></script>
   <script src="./codemirror-5.48.4/mode/css/css.js"></script>
   <script src="./codemirror-5.48.4/mode/xml/xml.js"></script>
+  <script src="https://cdn.bootcss.com/underscore.js/1.8.2/underscore-min.js"></script>
   <script>
     var CodeMirror = window.CodeMirror
     CodeMirror.defineExtension("autoFormatRange", function (from, to) {
@@ -205,6 +213,9 @@
       el: '#oo',
       data: function () {
         return {
+          user:{
+            userid:1
+          },
           mode: 0,
           dialogFormVisible: false,
           disabled: false,
@@ -249,25 +260,56 @@
             // 我的放在菜单上，我创建的，我收藏的，我的项目。
           ],
           datas: [],
+          favs:[],
           currentComp: 0,
-          currentMenuType: 0
+          currentMenuType: 0,
+          currentCompID:'',
         }
       },
       mounted: function () {
+        // 获取页面参数
+        var self = this;
+        var currentMenuType = self.getQueryString('type');
+        var currentCompID = self.getQueryString('mguid');
+        if(currentMenuType) {
+          self.currentMenuType = currentMenuType;
+        }
+        if(currentCompID){
+          self.currentCompID = currentCompID;
+        }
+
         this._getData(this.currentMenuType)
+        
 
       },
       methods: {
+        getQueryString:function(name){
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null)return  unescape(r[2]); return null;
+        },
         _getData: function (type) {
           var self = this
           $.ajax({
             type: 'post',
-            url: '/api/values/' + type,
+            url: 'http://localhost:1576/api/values/' + type,
             success: function (res) {
               if (res.code == 200) {
                 self.datas = res.data
-                self.currentComp =0
+                if(!self.currentCompID){
+                  self.currentComp =0
+                } else {
+                  // 找到相应的currentComp
+                  var mindex = _.findIndex = _.findIndex(self.datas,function(item){
+                    return item.mguid == self.currentCompID;
+                  })
+                  if(mindex>=0){
+                    self.currentComp = mindex;
+                  }
+                }
                 self._initialize()
+                self.getFav()
+
               }
             }
           });
@@ -305,6 +347,9 @@
             document.getElementsByTagName('head')[0].appendChild(style)
           })
         },
+        emptyStyle:function(){
+          document.getElementsByTagName('style')[0].remove();
+        },
         add: function () {
           var self = this
           self.mode = 1
@@ -319,12 +364,70 @@
           
           self._initialize()
         },
-        changeCard:function(index){
+        getFav:function(){
+          var self = this;
+          $.ajax({
+            type: 'get',
+            url: 'http://localhost:1576/api/fav/'+self.user.userid+'/'+self.currentMenuType,
+            
+            success: function (result) {
+              //var json = JSON.parse(result);
+              self.favs = result
+              self.datas = _.map(self.datas,function(item){
+                var index = _.findIndex(result,function(i){
+                  return i.mguid == item.mguid
+                })
+                item['fav'] = index
+                return item;
+              })
+
+            }
+          });
+        },
+        fav:function(item,index){
+          // 添加收藏
+          var self = this;
+          var data = {
+            userid: self.user.userid,
+            mtype: item.mtype,
+            mguid: item.mguid
+          }
+          var flag = item.fav 
+          $.ajax({
+            type: 'post',
+            url: 'http://localhost:1576/api/fav',
+            data: data, //请求的参数
+         
+            success: function (result) {
+              //var json = JSON.parse(result);
+              // 切换收藏的状态
+              debugger
+              if(flag == -1){
+                item.fav =0
+                // self.datas[index].fav = 0
+              } else {
+                // self.$set(self.datas[index],'fav',-1)
+                item.fav =-1
+
+                // self.datas[index].fav = -1
+              }
+              self.$set(self.datas,index,item)
+
+            }
+          });
+
+
+        },
+        changeCard:function(index,item){
+          this.emptyStyle()
           this.currentComp = index;
           this._initialize()
+          
         },
         changeMenu: function (item) {
           var self = this
+          this.emptyStyle()
+
           self.currentMenuType = item.type
           self._getData(self.currentMenuType)
           self.currentComp = 0
@@ -339,7 +442,7 @@
           var self = this
           self.formData = new FormData()
           self.formData.append('title', self.form.title)
-          self.formData.append('userid', 'admin')
+          self.formData.append('userid', self.user.userid)
           self.formData.append('type', self.currentMenuType)
           self.formData.append('desc', self.form.desc)
           self.formData.append('html', self.codeMirrorHtml.getValue())
@@ -349,7 +452,7 @@
 
           $.ajax({
             type: 'post',
-            url: '/api/values',
+            url: 'http://localhost:1576/api/values',
             data: self.formData, //请求的参数
             async: false,
             cache: false,

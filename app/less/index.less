@@ -7,12 +7,12 @@ html,body{
 }
 @font-face {
     font-family: 'iconfont';  /* project id 1411090 */
-    src: url('//at.alicdn.com/t/font_1411090_j409kk4ckqb.eot');
-    src: url('//at.alicdn.com/t/font_1411090_j409kk4ckqb.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_1411090_j409kk4ckqb.woff2') format('woff2'),
-    url('//at.alicdn.com/t/font_1411090_j409kk4ckqb.woff') format('woff'),
-    url('//at.alicdn.com/t/font_1411090_j409kk4ckqb.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_1411090_j409kk4ckqb.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_1411090_yyky0t41cxp.eot');
+    src: url('//at.alicdn.com/t/font_1411090_yyky0t41cxp.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1411090_yyky0t41cxp.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1411090_yyky0t41cxp.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1411090_yyky0t41cxp.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1411090_yyky0t41cxp.svg#iconfont') format('svg');
   }
   .iconfont{
     font-family:"iconfont" !important;
@@ -140,16 +140,59 @@ li{
             position: absolute;
             top: 0;
             left: 60px;
-            width: 210px;
+            width: 256px;
             height: 100%;  
             background: #fafafa;
             overflow: auto;
+            padding: 10px 16px;
+            padding-top: 0;
             .card{
-                width: 80%;
+                // width: 92%;
                 margin:20px auto;
                 background: #fff;
                 padding: 10px;
                 text-align: center;
+                position: relative;
+                .card-mask{
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100%;
+                    bottom: 0;
+                    // background: rgba(0,0,0,.1);
+                }
+                .mask-btns{
+                    position: absolute;
+                    // top: 50%;
+                    // left: 50%;
+                    // transform: translate(-50%,-50%);
+                    width: 100%;
+                    height: 32px;
+                    line-height: 32px;
+                    bottom: 0px;
+                    background: #090723;
+                    i {
+                        padding: 0 8px;
+                        font-size: 20px;
+                        // font-weight: 
+                        // color: #0084ff;
+                        cursor: pointer;
+                        color: #fff;
+                        &:hover{
+                            // color:#0084ff;
+                        }
+                    }
+                    .preview{
+                        // color: #0084ff;
+                        color: red;
+                    }
+                }
+                &:hover .card-mask{
+                    display: block;
+                }
                 .img{
                     max-width: 100%;
                 }
@@ -161,24 +204,26 @@ li{
                 }
             }
             .add{
+                position: absolute;
+                bottom: 0;
                 margin:20px auto;
-                width: 80%;
-                height: 30px;
-                line-height: 26px;
-             
+                margin-top: 10px;
+    
+                width: 225px;
+                display: block;
                 text-align: center;
-                background: #0084ff;
-                color: #fff;
-                font-size: 18px;
-                font-weight: 400;
-                border-radius: 3px;
+
+                color:#409EFF !important;
+                border-color:#c6e2ff !important;
+                background-color:#ecf5ff !important;
+
                 cursor: pointer;
             }
         }
         .edit{
             position: absolute;
             top: 0;
-            left: 271px;
+            left: 317px;
             right: 0;
             bottom: 0;
             
@@ -209,7 +254,9 @@ li{
                 }
                 &:nth-child(3){
                     border-right: 1px solid #2d333b; 
-                    border-bottom: 1px solid #2d333b;                            
+                    border-bottom: 1px solid #2d333b;     
+                    color: #fff;
+
                 }
                 &:nth-child(4){
                     background: #ffffff;
