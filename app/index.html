@@ -292,7 +292,7 @@
           var self = this
           $.ajax({
             type: 'post',
-            url: 'http://localhost:1576/api/values/' + type,
+            url: '/api/values/' + type,
             success: function (res) {
               if (res.code == 200) {
                 self.datas = res.data
@@ -368,7 +368,7 @@
           var self = this;
           $.ajax({
             type: 'get',
-            url: 'http://localhost:1576/api/fav/'+self.user.userid+'/'+self.currentMenuType,
+            url: '/api/fav/'+self.user.userid+'/'+self.currentMenuType,
             
             success: function (result) {
               //var json = JSON.parse(result);
@@ -395,7 +395,7 @@
           var flag = item.fav 
           $.ajax({
             type: 'post',
-            url: 'http://localhost:1576/api/fav',
+            url: '/api/fav',
             data: data, //请求的参数
          
             success: function (result) {
@@ -452,7 +452,7 @@
 
           $.ajax({
             type: 'post',
-            url: 'http://localhost:1576/api/values',
+            url: '/api/values',
             data: self.formData, //请求的参数
             async: false,
             cache: false,
