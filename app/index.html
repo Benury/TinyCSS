@@ -97,12 +97,12 @@
           </form>
         </div>
         <div class="l item">
-          
+          {{scale}}
         </div>
         <!-- <div class="l item" v-if="currentMenuType==0 && mode ==0">
           <img src="./img/cloud.png" alt="">
         </div> -->
-        <div class="l item"  v-html="preHtml">
+        <div class="l item pre-html"  v-html="preHtml">
         </div>
       </section>
     </main>
@@ -154,6 +154,7 @@
   <script src="./codemirror-5.48.4/mode/css/css.js"></script>
   <script src="./codemirror-5.48.4/mode/xml/xml.js"></script>
   <script src="https://cdn.bootcss.com/underscore.js/1.8.2/underscore-min.js"></script>
+  <script src="./html2canvas.min.js"></script>
   <script>
     var CodeMirror = window.CodeMirror
     CodeMirror.defineExtension("autoFormatRange", function (from, to) {
@@ -264,6 +265,7 @@
           currentComp: 0,
           currentMenuType: 0,
           currentCompID:'',
+          scale:1,
         }
       },
       mounted: function () {
@@ -330,6 +332,9 @@
           // 双向绑定
           this.preHtml = this.codeMirrorHtml.getValue();
 
+          // 计算缩放比例
+          self.scaleFunc()
+
           var style = document.createElement('style');
           style.type = "text/css";
           style.innerText = this.codeMirrorCss.getValue();
@@ -337,6 +342,7 @@
 
           this.codeMirrorHtml.on('change', (coder) => {
             self.preHtml = this.codeMirrorHtml.getValue();
+            self.scaleFunc()
           })
           this.codeMirrorCss.on('change', (coder) => {
             //self.preHtml = this.codeMirrorHtml.getValue(); 
@@ -347,7 +353,31 @@
             document.getElementsByTagName('head')[0].appendChild(style)
           })
         },
+        scaleFunc:function(){
+          var self = this
+          self.$nextTick(function(){
+            if(!$('.pre-html').children().length) return
+            var w = $('.pre-html').children().eq(0).width();
+            var prew =  $('.pre-html').width()
+            var h = $('.pre-html').children().eq(0).height();
+            var preh =  $('.pre-html').height()
+            
+            var wr =prew / w
+            var hr = preh / h
+            var r = 1;
+            r = wr > hr ? wr : hr
+            if(r >1) r = 1
+
+            self.scale =  r
+            $('.pre-html').children().eq(0).css({
+              'transform':'scale('+r+')',
+              'transformOrigin':'0 0'
+            })
+
+          })
+        },
         emptyStyle:function(){
+          if(!document.getElementsByTagName('style').length) return
           document.getElementsByTagName('style')[0].remove();
         },
         add: function () {
@@ -401,7 +431,7 @@
             success: function (result) {
               //var json = JSON.parse(result);
               // 切换收藏的状态
-              debugger
+              
               if(flag == -1){
                 item.fav =0
                 // self.datas[index].fav = 0
@@ -448,23 +478,45 @@
           self.formData.append('html', self.codeMirrorHtml.getValue())
           self.formData.append('css', self.codeMirrorCss.getValue())
           self.dialogFormVisible = false
-          self.$refs.uploadImg.submit()
+          //self.$refs.uploadImg.submit()
+          var w = $('.pre-html').children().eq(0).width();
+          var h = $('.pre-html').children().eq(0).height();
 
-          $.ajax({
-            type: 'post',
-            url: '/api/values',
-            data: self.formData, //请求的参数
-            async: false,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (result) {
-              //var json = JSON.parse(result);
-              self.mode = 0
-              self._getData(self.currentMenuType)
+            //var prew =  $('.pre-html').width()
+          window.html2canvas($('.pre-html').children().eq(0)[0], {
+                scale: 4,
+                width: w,
+                height: h
+            }).then(function (canvas) {
+                var context = canvas.getContext('2d');
+                context.mozImageSmoothingEnabled = false;
+                context.webkitImageSmoothingEnabled = false;
+                context.msImageSmoothingEnabled = false;
+                context.imageSmoothingEnabled = false;
+                var src64 = canvas.toDataURL()
+                src64 = src64.replace(/^data:image\/\w+;base64,/, "")
+                self.formData.append('file', src64)
 
-            }
-          });
+                $.ajax({
+                  type: 'post',
+                  url: '/api/values',
+                  data: self.formData, //请求的参数
+                  async: false,
+                  cache: false,
+                  contentType: false,
+                  processData: false,
+                  success: function (result) {
+                    //var json = JSON.parse(result);
+                    self.mode = 0
+                    self._getData(self.currentMenuType)
+
+                  }
+                });
+            })
+
+
+
+          
         }
       }
     })
