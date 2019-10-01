@@ -50,10 +50,11 @@
           <i class="iconfont" :class="item.icon"></i>
           <p>{{item.title}}</p>
         </li>
+        
+
       </menu>
       <menu class="model" v-show="mode==0">
-        <el-button size="small" class="add" @click="add" icon="el-icon-plus"></el-button>
-
+        
         <li class="card" :class="{'active':currentComp == index}" v-for="(item,index) in datas"
           @click="changeCard(index,item)">
           <img class="img" :src="'http://pxz8iaq4h.bkt.clouddn.com/'+item.mimg" alt="">
@@ -65,6 +66,9 @@
         </div>
         </li>
       </menu>
+      <el-button style="" size="small"  class="add" @click="add" icon="el-icon-plus"></el-button>
+
+
       <section class="edit" :class="{'add-tpl':mode==1}">
         <div class="l item">
           <form>
@@ -210,6 +214,7 @@
         }
       });
     });
+    var preUrl = ''
     new Vue({
       el: '#oo',
       data: function () {
@@ -294,7 +299,7 @@
           var self = this
           $.ajax({
             type: 'post',
-            url: '/api/values/' + type,
+            url: preUrl+ '/api/values/' + type,
             success: function (res) {
               if (res.code == 200) {
                 self.datas = res.data
@@ -398,7 +403,7 @@
           var self = this;
           $.ajax({
             type: 'get',
-            url: '/api/fav/'+self.user.userid+'/'+self.currentMenuType,
+            url: preUrl+'/api/fav/'+self.user.userid+'/'+self.currentMenuType,
             
             success: function (result) {
               //var json = JSON.parse(result);
@@ -425,7 +430,7 @@
           var flag = item.fav 
           $.ajax({
             type: 'post',
-            url: '/api/fav',
+            url: preUrl+'/api/fav',
             data: data, //请求的参数
          
             success: function (result) {
@@ -484,9 +489,7 @@
 
             //var prew =  $('.pre-html').width()
           window.html2canvas($('.pre-html').children().eq(0)[0], {
-                scale: 4,
-                width: w,
-                height: h
+            
             }).then(function (canvas) {
                 var context = canvas.getContext('2d');
                 context.mozImageSmoothingEnabled = false;
@@ -499,7 +502,7 @@
 
                 $.ajax({
                   type: 'post',
-                  url: '/api/values',
+                  url: preUrl+'/api/values',
                   data: self.formData, //请求的参数
                   async: false,
                   cache: false,
