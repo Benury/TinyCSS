@@ -358,6 +358,8 @@
             style.type = "text/css";
             style.innerText = this.codeMirrorCss.getValue();
             document.getElementsByTagName('head')[0].appendChild(style)
+            self.scaleFunc()
+
           })
         },
         scaleFunc:function(){
